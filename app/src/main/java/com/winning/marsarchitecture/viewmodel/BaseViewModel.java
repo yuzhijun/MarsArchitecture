@@ -80,7 +80,6 @@ public class BaseViewModel<T> extends AndroidViewModel implements IRequest<T>{
 
                     @Override
                     public void onError(Throwable t) {
-
                     }
 
                     @Override
