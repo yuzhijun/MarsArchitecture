@@ -8,18 +8,15 @@ import android.support.annotation.NonNull;
 
 import com.winning.marsarchitecture.datacenter.DataRepository;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
-import java.lang.reflect.Type;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 import static com.winning.marsarchitecture.util.Constants.PATH_URL;
 
@@ -29,8 +26,7 @@ import static com.winning.marsarchitecture.util.Constants.PATH_URL;
 
 public class BaseViewModel<T> extends AndroidViewModel implements IRequest<T>{
     private static final Pattern pattern = Pattern.compile("\\{(.*?)\\}");
-    private Annotation[][] parameterAnnotationsArray;
-    private Type[] parameterTypes;
+    protected Application mApplication;
     //生命周期观察的数据
     private MutableLiveData<T> liveObservableData = new MutableLiveData<>();
     public final CompositeDisposable mDisposable = new CompositeDisposable();
@@ -43,6 +39,7 @@ public class BaseViewModel<T> extends AndroidViewModel implements IRequest<T>{
 
     public BaseViewModel(@NonNull Application application) {
         super(application);
+        mApplication = application;
     }
 
     /**
@@ -73,29 +70,24 @@ public class BaseViewModel<T> extends AndroidViewModel implements IRequest<T>{
 
     public LiveData<T> getLiveObservableData(String url,String...params) {
         DataRepository.getDynamicData(url,getTClass())
-                    .subscribe(new Observer<T>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            mDisposable.add(d);
+                .subscribeWith(new DisposableSubscriber<T>() {
+                    @Override
+                    public void onNext(T value) {
+                        if(null != value){
+                            liveObservableData.setValue(value);
                         }
+                    }
 
-                        @Override
-                        public void onNext(T value) {
-                            if(null != value){
-                                liveObservableData.setValue(value);
-                            }
-                        }
+                    @Override
+                    public void onError(Throwable t) {
 
-                        @Override
-                        public void onError(Throwable e) {
+                    }
 
-                        }
+                    @Override
+                    public void onComplete() {
 
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+                    }
+                });
         return liveObservableData;
     }
 

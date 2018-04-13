@@ -4,7 +4,7 @@ import com.winning.marsarchitecture.datacenter.network.ApiServiceModule;
 import com.winning.marsarchitecture.util.GsonHelper;
 import com.winning.marsarchitecture.util.SwitchSchedulers;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
 import okhttp3.ResponseBody;
 
@@ -14,7 +14,7 @@ import okhttp3.ResponseBody;
 
 public class DataRepository {
 
-    public static <T> Observable getDynamicData(String url,final Class<T> clazz) {
+    public static <T> Flowable getDynamicData(String url, final Class<T> clazz) {
         return ApiServiceModule.getInstance().getNetworkService()
                 .getDynamicData(url)
                 .compose(SwitchSchedulers.applySchedulers())

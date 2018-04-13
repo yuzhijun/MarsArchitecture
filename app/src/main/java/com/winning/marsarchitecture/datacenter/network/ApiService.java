@@ -2,7 +2,7 @@ package com.winning.marsarchitecture.datacenter.network;
 
 import com.winning.marsarchitecture.model.GirlsData;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -14,8 +14,8 @@ import retrofit2.http.Url;
 
 public interface ApiService<T> {
     @GET
-    Observable<ResponseBody> getDynamicData(@Url String url);
+    Flowable<ResponseBody> getDynamicData(@Url String url);
 
     @GET ("api/data/福利/{size}/{index}")
-    Observable<GirlsData> getFuliData(@Path("size") String size, @Path("index") String index);
+    Flowable<GirlsData> getFuliData(@Path("size") String size, @Path("index") String index);
 }

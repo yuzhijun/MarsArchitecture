@@ -1,27 +1,30 @@
 package com.winning.marsarchitecture.datacenter;
 
+import android.app.Application;
+
+import com.winning.marsarchitecture.datacenter.db.AppDatabase;
+import com.winning.marsarchitecture.datacenter.db.User;
 import com.winning.marsarchitecture.datacenter.network.ApiServiceModule;
-import com.winning.marsarchitecture.model.GirlsData;
+import com.winning.marsarchitecture.util.AppExecutors;
 import com.winning.marsarchitecture.util.SwitchSchedulers;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
+import io.reactivex.Flowable;
 
 /**
  * Created by yuzhijun on 2018/4/12.
  */
 
 public class GirlsResposity {
-
-    public static Observable getFuliData(String size, String index) {
+    private static AppExecutors mAppExecutors = new AppExecutors();
+    public static Flowable getFuliData(String size, String index) {
          return  ApiServiceModule.getInstance().getNetworkService()
                  .getFuliData(size,index)
                  .compose(SwitchSchedulers.applySchedulers())
-                 .map(new Function<GirlsData,GirlsData>() {
-                     @Override
-                     public GirlsData apply(GirlsData o) throws Exception {
-                         return o;
-                     }
-                 });
+                 .map(girlsData -> girlsData);
+    }
+
+    public static Flowable<User> getUserData(Application application){
+        return AppDatabase.getInstance(application,mAppExecutors)
+                .userDao().getUser();
     }
 }
