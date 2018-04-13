@@ -25,11 +25,19 @@ public class MainActivity extends AppCompatActivity {
 
         tvTest = findViewById(R.id.tvTest);
         mGirlsViewModel = ViewModelProviders.of(MainActivity.this).get(DynamicGirlsViewModel.class);
+        mGirlsViewModel.getELiveObservableData(Constants.GIRLS_URL, "3").observe(MainActivity.this, new Observer<GirlsData>() {
+            @Override
+            public void onChanged(@Nullable GirlsData girlsData) {
+                if (null != girlsData){
+                    List<GirlsData.ResultsBean> resultsBeans = girlsData.getResults();
+                }
+            }
+        });
 
         tvTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGirlsViewModel.getLiveObservableData(Constants.GIRLS_URL).observe(MainActivity.this, new Observer<GirlsData>() {
+                mGirlsViewModel.getGirlsData("2","3").observe(MainActivity.this, new Observer<GirlsData>() {
                     @Override
                     public void onChanged(@Nullable GirlsData girlsData) {
                         if (null != girlsData){
