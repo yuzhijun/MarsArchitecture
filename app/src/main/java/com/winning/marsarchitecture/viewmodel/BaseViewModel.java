@@ -114,18 +114,18 @@ public class BaseViewModel<T> extends AndroidViewModel implements IRequest<T>{
             if (index > 0){
                 baseUrl = url.substring(0,index-1);
                 Matcher matcher = pattern.matcher(url);
-                StringBuffer stringBuffer = new StringBuffer();
-                stringBuffer.append("?");
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("?");
                 for (int i = 0;matcher.find();i++){
                     String key = matcher.group();
                     String realKey = key.substring(key.indexOf("{")+1,key.lastIndexOf("}"));
                     Object[] value = (Object[]) args[1];
                     if (value != null){
-                        stringBuffer.append(realKey+"="+value[i]+ "&");
+                        stringBuilder.append(realKey+"="+value[i]+ "&");
                     }
                 }
 
-                baseUrl += stringBuffer.toString();
+                baseUrl += stringBuilder.toString();
             }
         }
 
