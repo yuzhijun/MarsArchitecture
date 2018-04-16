@@ -12,7 +12,7 @@ import com.winning.marsarchitecture.viewmodel.DynamicGirlsViewModel;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     private DynamicGirlsViewModel mGirlsViewModel;
     private TextView tvTest;
     @Override
